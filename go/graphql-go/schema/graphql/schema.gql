@@ -1,0 +1,49 @@
+# フラグメントを定義するがgraphql-goでは対応されていない
+# fragment Post on Post {
+#   id
+#   title
+# }
+
+# fragment User on User {
+#   id
+#   name
+#   posts {
+#     ...Post
+#   }
+# }
+"""
+ルートの型
+"""
+schema {
+  query: Query
+}
+
+interface Node {
+  id: ID!
+}
+
+type Post implements Node {
+  id: ID!
+  title: String!
+  user: User!
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+}
+
+type PostConnection {
+  edges: [PostEdge!]!
+  nodes: [Post!]!
+}
+
+type PostEdge {
+  node: Post!
+  cursor: ID!
+}
+
+type Query {
+  user(id: ID!): User!
+  posts: PostConnection!
+}
