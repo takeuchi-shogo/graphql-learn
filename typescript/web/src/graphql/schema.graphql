@@ -1,0 +1,23 @@
+fragment User on User {
+  id
+  name
+}
+
+fragment Post on Post {
+  id
+  title
+  user {
+    ...User
+  }
+}
+
+query GetPosts {
+  posts {
+    edges {
+      cursor
+      node {
+        ...Post
+      }
+    }
+  }
+}
