@@ -23,13 +23,13 @@ func (r *PostResolver) ID() graphql.ID {
 	return graphql.ID(r.post.ID())
 }
 
-func (r *PostResolver) Title() string {
-	return r.post.Title()
+func (r *PostResolver) Content() string {
+	return r.post.Content()
 }
 
-func (r *PostResolver) User() *UserResolver {
-	fmt.Println("resolver.User()", r.post.UserID())
-	user, err := loader.LoadUser(r.ctx, r.post.UserID())
+func (r *PostResolver) Author() *UserResolver {
+	fmt.Println("resolver.User()", r.post.AuthorID())
+	user, err := loader.LoadUser(r.ctx, r.post.AuthorID())
 	if err != nil {
 		log.Println(err)
 		return nil

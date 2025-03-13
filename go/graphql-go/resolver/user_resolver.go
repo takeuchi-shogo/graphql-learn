@@ -17,6 +17,18 @@ func (r *UserResolver) ID() graphql.ID {
 	return graphql.ID(r.user.ID())
 }
 
-func (r *UserResolver) Name() string {
-	return r.user.Name()
+func (r *UserResolver) UserName() string {
+	return r.user.UserName()
+}
+
+func (r *UserResolver) DisplayName() string {
+	return r.user.DisplayName()
+}
+
+func (r *UserResolver) Bio() string {
+	return r.user.Bio()
+}
+
+func (r *UserResolver) AvatarURL() string {
+	return r.user.AvatarURL()
 }

@@ -24,13 +24,16 @@ interface Node {
 
 type Post implements Node {
   id: ID!
-  title: String!
-  user: User!
+  content: String!
+  author: User!
 }
 
 type User implements Node {
   id: ID!
-  name: String!
+  userName: String!
+  displayName: String!
+  bio: String!
+  avatarURL: String!
 }
 
 type PostConnection {

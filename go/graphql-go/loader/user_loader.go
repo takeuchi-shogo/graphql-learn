@@ -7,7 +7,7 @@ import (
 
 	"github.com/graph-gophers/dataloader"
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/entity"
-	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/service"
+	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/service/user"
 )
 
 type userLoader struct{}
@@ -17,7 +17,7 @@ func newUserLoader() dataloader.BatchFunc {
 }
 
 func (l userLoader) loadBatch(ctx context.Context, keys dataloader.Keys) []*dataloader.Result {
-	userService, ok := ctx.Value(UserServiceKey).(*service.UserService)
+	userService, ok := ctx.Value(UserServiceKey).(*user.GetUserService)
 	if !ok {
 		err := fmt.Errorf("user service not found in context")
 		results := make([]*dataloader.Result, len(keys))

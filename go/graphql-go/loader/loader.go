@@ -8,13 +8,6 @@ import (
 	"github.com/graph-gophers/dataloader"
 )
 
-type key string
-
-const (
-	userLoaderKey  key = "user"
-	UserServiceKey key = "userService"
-)
-
 type LoaderCollection struct {
 	dataloaderFuncMap map[key]dataloader.BatchFunc
 }

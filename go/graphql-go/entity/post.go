@@ -1,23 +1,39 @@
 package entity
 
+import "time"
+
 type Post struct {
-	id     string
-	title  string
-	userID string
+	id        string
+	content   string
+	authorID  string
+	createdAt time.Time
+	updatedAt time.Time
 }
 
-func NewPost(id, title, userID string) *Post {
-	return &Post{id: id, title: title, userID: userID}
+func newPost(id, content, authorID string, createdAt, updatedAt time.Time) *Post {
+	return &Post{
+		id:        id,
+		content:   content,
+		authorID:  authorID,
+		createdAt: createdAt,
+		updatedAt: updatedAt,
+	}
+}
+
+func NewPost(id, content, authorID string) *Post {
+	createdAt := time.Now()
+	updatedAt := time.Now()
+	return newPost(id, content, authorID, createdAt, updatedAt)
 }
 
 func (p Post) ID() string {
 	return p.id
 }
 
-func (p Post) Title() string {
-	return p.title
+func (p Post) Content() string {
+	return p.content
 }
 
-func (p Post) UserID() string {
-	return p.userID
+func (p Post) AuthorID() string {
+	return p.authorID
 }

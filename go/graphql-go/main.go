@@ -13,7 +13,7 @@ import (
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/handler"
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/loader"
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/schema"
-	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/service"
+	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/service/user"
 )
 
 func main() {
@@ -29,12 +29,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	schemaHandler, err := graphql.ParseSchema(s, &handler.Query{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	userService := service.NewUserService()
+	userService := user.NewGetUserService()
 
 	e.POST("/graphql", func(c echo.Context) error {
 		h := &relay.Handler{Schema: schemaHandler}
