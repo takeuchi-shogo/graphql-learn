@@ -10,6 +10,7 @@ type User struct {
 	avatarURL   string
 	createdAt   time.Time
 	updatedAt   time.Time
+	deletedAt   *time.Time
 }
 
 func newUser(id, userName, displayName, bio, avatarURL string, createdAt, updatedAt time.Time) *User {
@@ -21,6 +22,7 @@ func newUser(id, userName, displayName, bio, avatarURL string, createdAt, update
 		avatarURL:   avatarURL,
 		createdAt:   createdAt,
 		updatedAt:   updatedAt,
+		deletedAt:   nil,
 	}
 }
 func NewUser(id, userName, displayName, bio, avatarURL string) *User {
@@ -51,4 +53,16 @@ func (u User) Bio() string {
 
 func (u User) AvatarURL() string {
 	return u.avatarURL
+}
+
+func (u User) CreatedAt() time.Time {
+	return u.createdAt
+}
+
+func (u User) UpdatedAt() time.Time {
+	return u.updatedAt
+}
+
+func (u User) DeletedAt() *time.Time {
+	return u.deletedAt
 }

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/posts/$id/')({
+export const Route = createFileRoute('/(app)/posts/$id/')({
   // In a loader
   loader: ({ params }) => params.id,
   // Or in a component

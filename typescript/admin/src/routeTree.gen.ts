@@ -8,120 +8,222 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
-import { Route as PostsIndexImport } from './routes/posts/index'
-import { Route as PostsIdIndexImport } from './routes/posts/$id/index'
-import { Route as PostsIdEditImport } from './routes/posts/$id/edit'
+import { Route as PathlessLayoutImport } from './routes/_pathlessLayout'
+import { Route as publicIndexImport } from './routes/(public)/index'
+import { Route as authLoginRouteImport } from './routes/(auth)/login/route'
+import { Route as appPostsIndexImport } from './routes/(app)/posts/index'
+import { Route as appPostsPathlessLayoutImport } from './routes/(app)/posts/_pathlessLayout'
+import { Route as appPostsIdIndexImport } from './routes/(app)/posts/$id/index'
+import { Route as appPostsIdEditImport } from './routes/(app)/posts/$id/edit'
+
+// Create Virtual Routes
+
+const appPostsImport = createFileRoute('/(app)/posts')()
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
-  id: '/',
+const PathlessLayoutRoute = PathlessLayoutImport.update({
+  id: '/_pathlessLayout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const appPostsRoute = appPostsImport.update({
+  id: '/(app)/posts',
+  path: '/posts',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const publicIndexRoute = publicIndexImport.update({
+  id: '/(public)/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const PostsIndexRoute = PostsIndexImport.update({
-  id: '/posts/',
-  path: '/posts/',
+const authLoginRouteRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
-const PostsIdIndexRoute = PostsIdIndexImport.update({
-  id: '/posts/$id/',
-  path: '/posts/$id/',
-  getParentRoute: () => rootRoute,
+const appPostsIndexRoute = appPostsIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => appPostsRoute,
 } as any)
 
-const PostsIdEditRoute = PostsIdEditImport.update({
-  id: '/posts/$id/edit',
-  path: '/posts/$id/edit',
-  getParentRoute: () => rootRoute,
+const appPostsPathlessLayoutRoute = appPostsPathlessLayoutImport.update({
+  id: '/_pathlessLayout',
+  getParentRoute: () => appPostsRoute,
+} as any)
+
+const appPostsIdIndexRoute = appPostsIdIndexImport.update({
+  id: '/$id/',
+  path: '/$id/',
+  getParentRoute: () => appPostsRoute,
+} as any)
+
+const appPostsIdEditRoute = appPostsIdEditImport.update({
+  id: '/$id/edit',
+  path: '/$id/edit',
+  getParentRoute: () => appPostsRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_pathlessLayout': {
+      id: '/_pathlessLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PathlessLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/(public)/': {
+      id: '/(public)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof publicIndexImport
       parentRoute: typeof rootRoute
     }
-    '/posts/': {
-      id: '/posts/'
+    '/(app)/posts': {
+      id: '/(app)/posts'
       path: '/posts'
       fullPath: '/posts'
-      preLoaderRoute: typeof PostsIndexImport
+      preLoaderRoute: typeof appPostsImport
       parentRoute: typeof rootRoute
     }
-    '/posts/$id/edit': {
-      id: '/posts/$id/edit'
-      path: '/posts/$id/edit'
+    '/(app)/posts/_pathlessLayout': {
+      id: '/(app)/posts/_pathlessLayout'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof appPostsPathlessLayoutImport
+      parentRoute: typeof appPostsRoute
+    }
+    '/(app)/posts/': {
+      id: '/(app)/posts/'
+      path: '/'
+      fullPath: '/posts/'
+      preLoaderRoute: typeof appPostsIndexImport
+      parentRoute: typeof appPostsImport
+    }
+    '/(app)/posts/$id/edit': {
+      id: '/(app)/posts/$id/edit'
+      path: '/$id/edit'
       fullPath: '/posts/$id/edit'
-      preLoaderRoute: typeof PostsIdEditImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof appPostsIdEditImport
+      parentRoute: typeof appPostsImport
     }
-    '/posts/$id/': {
-      id: '/posts/$id/'
-      path: '/posts/$id'
+    '/(app)/posts/$id/': {
+      id: '/(app)/posts/$id/'
+      path: '/$id'
       fullPath: '/posts/$id'
-      preLoaderRoute: typeof PostsIdIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof appPostsIdIndexImport
+      parentRoute: typeof appPostsImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface appPostsRouteChildren {
+  appPostsPathlessLayoutRoute: typeof appPostsPathlessLayoutRoute
+  appPostsIndexRoute: typeof appPostsIndexRoute
+  appPostsIdEditRoute: typeof appPostsIdEditRoute
+  appPostsIdIndexRoute: typeof appPostsIdIndexRoute
+}
+
+const appPostsRouteChildren: appPostsRouteChildren = {
+  appPostsPathlessLayoutRoute: appPostsPathlessLayoutRoute,
+  appPostsIndexRoute: appPostsIndexRoute,
+  appPostsIdEditRoute: appPostsIdEditRoute,
+  appPostsIdIndexRoute: appPostsIdIndexRoute,
+}
+
+const appPostsRouteWithChildren = appPostsRoute._addFileChildren(
+  appPostsRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/posts': typeof PostsIndexRoute
-  '/posts/$id/edit': typeof PostsIdEditRoute
-  '/posts/$id': typeof PostsIdIndexRoute
+  '': typeof PathlessLayoutRoute
+  '/login': typeof authLoginRouteRoute
+  '/': typeof publicIndexRoute
+  '/posts': typeof appPostsPathlessLayoutRoute
+  '/posts/': typeof appPostsIndexRoute
+  '/posts/$id/edit': typeof appPostsIdEditRoute
+  '/posts/$id': typeof appPostsIdIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/posts': typeof PostsIndexRoute
-  '/posts/$id/edit': typeof PostsIdEditRoute
-  '/posts/$id': typeof PostsIdIndexRoute
+  '': typeof PathlessLayoutRoute
+  '/login': typeof authLoginRouteRoute
+  '/': typeof publicIndexRoute
+  '/posts': typeof appPostsIndexRoute
+  '/posts/$id/edit': typeof appPostsIdEditRoute
+  '/posts/$id': typeof appPostsIdIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/posts/': typeof PostsIndexRoute
-  '/posts/$id/edit': typeof PostsIdEditRoute
-  '/posts/$id/': typeof PostsIdIndexRoute
+  '/_pathlessLayout': typeof PathlessLayoutRoute
+  '/(auth)/login': typeof authLoginRouteRoute
+  '/(public)/': typeof publicIndexRoute
+  '/(app)/posts': typeof appPostsRouteWithChildren
+  '/(app)/posts/_pathlessLayout': typeof appPostsPathlessLayoutRoute
+  '/(app)/posts/': typeof appPostsIndexRoute
+  '/(app)/posts/$id/edit': typeof appPostsIdEditRoute
+  '/(app)/posts/$id/': typeof appPostsIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/posts' | '/posts/$id/edit' | '/posts/$id'
+  fullPaths:
+    | ''
+    | '/login'
+    | '/'
+    | '/posts'
+    | '/posts/'
+    | '/posts/$id/edit'
+    | '/posts/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/posts' | '/posts/$id/edit' | '/posts/$id'
-  id: '__root__' | '/' | '/posts/' | '/posts/$id/edit' | '/posts/$id/'
+  to: '' | '/login' | '/' | '/posts' | '/posts/$id/edit' | '/posts/$id'
+  id:
+    | '__root__'
+    | '/_pathlessLayout'
+    | '/(auth)/login'
+    | '/(public)/'
+    | '/(app)/posts'
+    | '/(app)/posts/_pathlessLayout'
+    | '/(app)/posts/'
+    | '/(app)/posts/$id/edit'
+    | '/(app)/posts/$id/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  PostsIndexRoute: typeof PostsIndexRoute
-  PostsIdEditRoute: typeof PostsIdEditRoute
-  PostsIdIndexRoute: typeof PostsIdIndexRoute
+  PathlessLayoutRoute: typeof PathlessLayoutRoute
+  authLoginRouteRoute: typeof authLoginRouteRoute
+  publicIndexRoute: typeof publicIndexRoute
+  appPostsRoute: typeof appPostsRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  PostsIndexRoute: PostsIndexRoute,
-  PostsIdEditRoute: PostsIdEditRoute,
-  PostsIdIndexRoute: PostsIdIndexRoute,
+  PathlessLayoutRoute: PathlessLayoutRoute,
+  authLoginRouteRoute: authLoginRouteRoute,
+  publicIndexRoute: publicIndexRoute,
+  appPostsRoute: appPostsRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -134,23 +236,45 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/posts/",
-        "/posts/$id/edit",
-        "/posts/$id/"
+        "/_pathlessLayout",
+        "/(auth)/login",
+        "/(public)/",
+        "/(app)/posts"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_pathlessLayout": {
+      "filePath": "_pathlessLayout.tsx"
     },
-    "/posts/": {
-      "filePath": "posts/index.tsx"
+    "/(auth)/login": {
+      "filePath": "(auth)/login/route.tsx"
     },
-    "/posts/$id/edit": {
-      "filePath": "posts/$id/edit.tsx"
+    "/(public)/": {
+      "filePath": "(public)/index.tsx"
     },
-    "/posts/$id/": {
-      "filePath": "posts/$id/index.tsx"
+    "/(app)/posts": {
+      "filePath": "(app)/posts",
+      "children": [
+        "/(app)/posts/_pathlessLayout",
+        "/(app)/posts/",
+        "/(app)/posts/$id/edit",
+        "/(app)/posts/$id/"
+      ]
+    },
+    "/(app)/posts/_pathlessLayout": {
+      "filePath": "(app)/posts/_pathlessLayout.tsx",
+      "parent": "/(app)/posts"
+    },
+    "/(app)/posts/": {
+      "filePath": "(app)/posts/index.tsx",
+      "parent": "/(app)/posts"
+    },
+    "/(app)/posts/$id/edit": {
+      "filePath": "(app)/posts/$id/edit.tsx",
+      "parent": "/(app)/posts"
+    },
+    "/(app)/posts/$id/": {
+      "filePath": "(app)/posts/$id/index.tsx",
+      "parent": "/(app)/posts"
     }
   }
 }

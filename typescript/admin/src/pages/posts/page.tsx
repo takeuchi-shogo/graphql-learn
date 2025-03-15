@@ -1,5 +1,5 @@
-import { useGetPostsQuery } from '../../__generated__/graphql'
-
+import { useGetPostsQuery } from '@/__generated__/graphql'
+import { PostList } from '@/features/posts/components/post-list'
 export default function PostsPage() {
   const { data, loading, error } = useGetPostsQuery({
     variables: {
@@ -11,12 +11,7 @@ export default function PostsPage() {
   if (error) return <div>Error: {error.message}</div>
   return (
     <>
-      {data && data?.posts.edges.map((edge) => (
-        <div key={edge.node.id}>
-          <p>{edge.node.content}</p>
-          <p>{edge.node.author.displayName}</p>
-        </div>
-      ))}
+      {data && <PostList posts={data.posts.edges.map((edge) => edge.node)} />}
     </>
   )
 }

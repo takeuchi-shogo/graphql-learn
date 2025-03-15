@@ -8,6 +8,7 @@ type Post struct {
 	authorID  string
 	createdAt time.Time
 	updatedAt time.Time
+	deletedAt *time.Time
 }
 
 func newPost(id, content, authorID string, createdAt, updatedAt time.Time) *Post {
@@ -17,6 +18,7 @@ func newPost(id, content, authorID string, createdAt, updatedAt time.Time) *Post
 		authorID:  authorID,
 		createdAt: createdAt,
 		updatedAt: updatedAt,
+		deletedAt: nil,
 	}
 }
 
