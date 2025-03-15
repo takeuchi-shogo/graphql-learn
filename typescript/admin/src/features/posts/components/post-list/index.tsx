@@ -1,4 +1,5 @@
-import { PostFragment } from '@/__generated__/graphql'
+import type { PostFragment } from '@/__generated__/graphql'
+import { PostListItem } from '../post-list-item'
 
 type Props = {
   posts: PostFragment[]
@@ -8,10 +9,7 @@ export function PostList({ posts }: Props) {
   return (
     <div>
       {posts.map((post) => (
-        <div key={post.id}>
-          <p>{post.content}</p>
-          <p>{post.author.displayName}</p>
-        </div>
+        <PostListItem key={post.id} post={post} />
       ))}
     </div>
   )

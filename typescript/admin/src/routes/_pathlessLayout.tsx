@@ -1,9 +1,15 @@
+import { Navbar } from '@/components/ui/navbar'
 import { createFileRoute } from '@tanstack/react-router'
-
+import { Outlet } from '@tanstack/react-router'
 export const Route = createFileRoute('/_pathlessLayout')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/_pathlessLayout"!</div>
+  return (
+    <div>
+      <Navbar />
+      <Outlet />
+    </div>
+  )
 }
