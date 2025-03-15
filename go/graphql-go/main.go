@@ -12,6 +12,7 @@ import (
 	"github.com/labstack/echo/middleware"
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/handler"
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/loader"
+	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/repository"
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/schema"
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/service/user"
 )
@@ -35,7 +36,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	userService := user.NewGetUserService()
+	userRepository := repository.NewUserRepository()
+	userService := user.NewGetUserService(userRepository)
 
 	e.POST("/graphql", func(c echo.Context) error {
 		h := &relay.Handler{Schema: schemaHandler}
@@ -46,12 +48,6 @@ func main() {
 		ctx := c.Request().Context()
 		// まずLoaderをアタッチ
 		ctx = loaderCollection.Attach(ctx)
-		// デバッグ用のログ
-		if v := ctx.Value("user"); v != nil {
-			log.Printf("Loader is present in context")
-		} else {
-			log.Printf("Loader is NOT present in context")
-		}
 		// その後UserServiceを追加
 		ctx = context.WithValue(ctx, loader.UserServiceKey, userService)
 

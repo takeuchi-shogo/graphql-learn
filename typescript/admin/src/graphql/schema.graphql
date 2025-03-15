@@ -1,0 +1,26 @@
+fragment User on User {
+  id
+  userName
+  displayName
+  bio
+  avatarURL
+}
+
+fragment Post on Post {
+  id
+  content
+  author {
+    ...User
+  }
+}
+
+query GetPosts($first: Int, $after: String) {
+  posts(first: $first, after: $after) {
+    edges {
+      cursor
+      node {
+        ...Post
+      }
+    }
+  }
+}

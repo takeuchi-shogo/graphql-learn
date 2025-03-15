@@ -26,7 +26,6 @@ func (l userLoader) loadBatch(ctx context.Context, keys dataloader.Keys) []*data
 		}
 		return results
 	}
-	fmt.Println("userService", userService)
 
 	results := make([]*dataloader.Result, len(keys))
 	var wg sync.WaitGroup
@@ -38,7 +37,6 @@ func (l userLoader) loadBatch(ctx context.Context, keys dataloader.Keys) []*data
 			defer wg.Done()
 
 			user, err := userService.GetUser(key.String())
-			fmt.Println("user", user)
 
 			mu.Lock()
 			results[i] = &dataloader.Result{Data: user, Error: err}

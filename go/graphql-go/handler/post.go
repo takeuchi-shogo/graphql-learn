@@ -2,14 +2,36 @@ package handler
 
 import (
 	"context"
+	"log"
 
-	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/entity"
+	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/repository"
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/resolver"
+	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/service/post"
 )
 
-func (q *Query) Posts(ctx context.Context) *resolver.PostConnectionResolver {
-	return resolver.NewPostConnectionResolver(ctx, []*entity.Post{
-		entity.NewPost("1", "Post 1", "1"),
-		entity.NewPost("2", "Post 2", "1"),
+type PostsArgs struct {
+	First *float64
+	After *string
+}
+
+func (q *Query) Posts(ctx context.Context, args PostsArgs) *resolver.PostConnectionResolver {
+	postRepository := repository.NewPostRepository()
+	postService := post.NewGetListService(postRepository)
+
+	var first *int
+	if args.First != nil {
+		val := int(*args.First)
+		first = &val
+	}
+
+	posts, err := postService.GetList(post.GetListInput{
+		First: first,
+		After: args.After,
 	})
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
+	return resolver.NewPostConnectionResolver(ctx, posts)
 }

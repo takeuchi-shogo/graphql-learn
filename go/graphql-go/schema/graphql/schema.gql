@@ -48,5 +48,5 @@ type PostEdge {
 
 type Query {
   user(id: ID!): User!
-  posts: PostConnection!
+  posts(first: Int, after: String): PostConnection!
 }
