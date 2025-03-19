@@ -1,0 +1,17 @@
+enum ErrorCode {
+  INVALID_CREDENTIALS
+  USER_NOT_FOUND
+  INTERNAL_SERVER_ERROR
+}
+
+interface UserError {
+  message: String!
+  code: ErrorCode!
+  path: [String!]!
+}
+
+type LoginError implements UserError {
+  message: String!
+  code: ErrorCode!
+  path: [String!]!
+}

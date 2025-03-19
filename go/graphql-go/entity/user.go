@@ -8,6 +8,8 @@ type User struct {
 	displayName string
 	bio         string
 	avatarURL   string
+	Emails      []*UserEmail
+	Password    *UserPassword
 	createdAt   time.Time
 	updatedAt   time.Time
 	deletedAt   *time.Time

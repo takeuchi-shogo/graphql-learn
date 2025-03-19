@@ -16,6 +16,7 @@
 """
 schema {
   query: Query
+  mutation: Mutation
 }
 
 interface Node {
@@ -49,4 +50,28 @@ type PostEdge {
 type Query {
   user(id: ID!): User!
   posts(first: Int, after: String): PostConnection!
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): CreatePostPayload! @tag(name: "post")
+  login(input: LoginInput!): LoginPayload!
+}
+
+type LoginInput {
+  email: String!
+  password: String!
+}
+
+type LoginPayload {
+  token: String
+  userErrors: [UserError!]!
+}
+
+type CreatePostInput {
+  content: String!
+  authorId: ID!
+}
+
+type CreatePostPayload {
+  post: Post!
 }

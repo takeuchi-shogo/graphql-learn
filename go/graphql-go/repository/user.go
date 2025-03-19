@@ -12,10 +12,15 @@ type UserRepository struct{}
 
 type UserRepositoryImpl interface {
 	GetUser(id string) (*entity.User, error)
+	GetUserByEmail(email string) (*entity.User, error)
 }
 
 func NewUserRepository() UserRepositoryImpl {
 	return &UserRepository{}
+}
+
+func (r *UserRepository) GetUserByEmail(email string) (*entity.User, error) {
+	return nil, nil
 }
 
 func (r *UserRepository) GetUser(id string) (*entity.User, error) {
