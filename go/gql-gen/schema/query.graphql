@@ -1,0 +1,5 @@
+type Query {
+  todos(first: Int = 10, after: String, last: Int, before: String, isReverse: Boolean = false, status: TodoStatus): TodoConnection!
+  todoById(id: ID!): Todo!
+  user(id: ID!): User!
+}

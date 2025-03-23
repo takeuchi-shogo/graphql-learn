@@ -1,0 +1,5 @@
+type Mutation {
+  createTodo(input: NewTodo!): Todo!
+  login(input: LoginInput!): LoginPayload!
+  signup(input: UserCreateInput!): UserCreatePayload!
+}

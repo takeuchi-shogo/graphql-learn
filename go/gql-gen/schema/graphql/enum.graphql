@@ -1,0 +1,11 @@
+enum TodoStatus {
+  PENDING
+  TODO
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}

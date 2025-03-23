@@ -67,6 +67,12 @@ type LoginPayload {
   userErrors: [UserError!]!
 }
 
+type UserError {
+  message: String!
+  code: String!
+  path: [String!]!
+}
+
 type CreatePostInput {
   content: String!
   authorId: ID!

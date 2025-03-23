@@ -1,0 +1,11 @@
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+
+type LoginPayload {
+  token: String!
+  entity: User!
+  userErrors: [UserError!]!
+}

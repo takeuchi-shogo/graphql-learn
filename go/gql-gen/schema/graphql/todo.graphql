@@ -1,0 +1,32 @@
+type Todo implements Node {
+  id: ID!
+  title: String!
+  description: String
+  status: TodoStatus!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TodoConnection {
+  edges: [TodoEdge!]!
+  nodes: [Todo!]!
+  pageInfo: PageInfo!
+  userErrors: [UserError!]!
+}
+
+type TodoEdge {
+  node: Todo!
+  cursor: String!
+}
+
+input NewTodo {
+  title: String!
+  description: String
+  status: TodoStatus!
+}
+
+type TodoCreatePayload {
+  entity: Todo!
+  userErrors: [UserError!]!
+}
