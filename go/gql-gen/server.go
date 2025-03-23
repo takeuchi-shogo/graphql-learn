@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/takeuchi-shogo/graphql-learn/go/gql-gen/graph"
+	"github.com/takeuchi-shogo/graphql-learn/go/gql-gen/loaders"
 	"github.com/takeuchi-shogo/graphql-learn/go/gql-gen/resolver"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -29,15 +30,15 @@ func main() {
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
 
+	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	http.Handle("/query", loaders.Middleware(srv))
+
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
 
 	srv.Use(extension.Introspection{})
 	srv.Use(extension.AutomaticPersistedQuery{
 		Cache: lru.New[string](100),
 	})
-
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
