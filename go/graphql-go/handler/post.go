@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/takeuchi-shogo/graphql-learn/go/graphql-go/repository"
@@ -34,4 +35,29 @@ func (q *Query) Posts(ctx context.Context, args PostsArgs) *resolver.PostConnect
 	}
 
 	return resolver.NewPostConnectionResolver(ctx, posts)
+}
+
+type CreatePostArgs struct {
+	Input struct {
+		Content  string
+		AuthorID string
+	}
+}
+
+func (q *Query) CreatePost(ctx context.Context, args CreatePostArgs) *resolver.CreatePostPayloadResolver {
+	fmt.Println("CreatePost", args)
+
+	postRepository := repository.NewPostRepository()
+	postService := post.NewCreateService(postRepository)
+
+	post, err := postService.Create(post.CreateInput{
+		Content:  args.Input.Content,
+		AuthorID: args.Input.AuthorID,
+	})
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
+	return resolver.NewCreatePostPayloadResolver(ctx, post)
 }

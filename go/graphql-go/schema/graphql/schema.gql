@@ -1,16 +1,3 @@
-# フラグメントを定義するがgraphql-goでは対応されていない
-# fragment Post on Post {
-#   id
-#   title
-# }
-
-# fragment User on User {
-#   id
-#   name
-#   posts {
-#     ...Post
-#   }
-# }
 """
 ルートの型
 """
@@ -53,11 +40,11 @@ type Query {
 }
 
 type Mutation {
-  createPost(input: CreatePostInput!): CreatePostPayload! @tag(name: "post")
+  createPost(input: CreatePostInput!): CreatePostPayload!
   login(input: LoginInput!): LoginPayload!
 }
 
-type LoginInput {
+input LoginInput {
   email: String!
   password: String!
 }
@@ -73,9 +60,9 @@ type UserError {
   path: [String!]!
 }
 
-type CreatePostInput {
+input CreatePostInput {
   content: String!
-  authorId: ID!
+  authorId: String!
 }
 
 type CreatePostPayload {

@@ -6,7 +6,6 @@ package resolver
 
 import (
 	"context"
-	"errors"
 
 	"github.com/takeuchi-shogo/graphql-learn/go/gql-gen/generated/model"
 	"github.com/takeuchi-shogo/graphql-learn/go/gql-gen/graph"
@@ -14,10 +13,11 @@ import (
 
 // User is the resolver for the user field.
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	if obj.User == nil {
-		return nil, errors.New("user not found")
+	user := &model.User{
+		ID:   obj.User.ID,
+		Name: "User " + obj.ID,
 	}
-	return obj.User, nil
+	return user, nil
 }
 
 // Todo returns graph.TodoResolver implementation.
